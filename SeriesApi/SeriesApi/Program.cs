@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SeriesApi.Models.EntityFramework;
+using SeriesApi.Models.Repository;
 
 namespace SeriesApi
 {
@@ -18,6 +19,9 @@ namespace SeriesApi
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<SeriesDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("SeriesDbContext")));
+
+            builder.Services.AddScoped<IDataRepository<Utilisateur>, UtilisateurManager>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
