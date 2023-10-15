@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NuGet.ContentModel;
 using SeriesApi.Controllers;
 using SeriesApi.Models.EntityFramework;
+using SeriesApi.Models.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,14 @@ namespace SeriesApi.Controllers.Tests
     {
         private readonly UtilisateursController _controller;
         private readonly SeriesDbContext _context;
+        private readonly IDataRepository<Utilisateur> _dataRepository;
 
         public UtilisateursControllerTests()
         {
             var builder = new DbContextOptionsBuilder<SeriesDbContext>().UseNpgsql("Server=localhost;port=5432;Database=seriesDB;uid=postgres;password=admin;");
             _context = new SeriesDbContext(builder.Options);
-            _controller = new UtilisateursController(_context);
+            _dataRepository = new UtilisateurManager(_context);
+            _controller = new UtilisateursController(_dataRepository);
         }
 
         [TestMethod()]
