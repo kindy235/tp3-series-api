@@ -23,7 +23,14 @@ namespace SeriesApi.Models.Repository
 
         public async Task DeleteAsync(Utilisateur utilisateur)
         {
-            seriesDbContext.Utilisateurs.Remove(utilisateur);
+            var user = seriesDbContext.Utilisateurs.Include(x=>x.NotesUtilisateur).FirstOrDefault(x=>x.UtilisateurId == utilisateur.UtilisateurId);
+            foreach (var notation in user.NotesUtilisateur)
+            {
+                seriesDbContext.Notations.Remove(notation);
+            }
+            
+            seriesDbContext.Utilisateurs.Remove(user);
+
             await seriesDbContext.SaveChangesAsync();
         }
 

@@ -41,7 +41,7 @@ namespace SeriesApi.Controllers
         // GET: api/Utilisateur/GetByIdAsync/5
         [Route("[action]/{id}")]
         [HttpGet]
-        [ActionName("GetByIdAsync")]
+        [ActionName("GetById")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Utilisateur))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Utilisateur>> GetUtilisateurById(int id)
@@ -49,6 +49,11 @@ namespace SeriesApi.Controllers
             var utilisateur = await dataRepository.GetByIdAsync(id);
 
             if (utilisateur == null)
+            {
+                return NotFound();
+            }
+
+            if (utilisateur.Value == null)
             {
                 return NotFound();
             }
@@ -69,7 +74,7 @@ namespace SeriesApi.Controllers
 
             if (utilisateur == null)
             {
-                return NotFound("utilisateur avec l'email " + email + " introuvable");
+                return NotFound();
             }
 
             return Ok(utilisateur.Value);
@@ -117,7 +122,7 @@ namespace SeriesApi.Controllers
 
             await dataRepository.AddAsync(utilisateur);
 
-            return CreatedAtAction("GetByIdAsync", new { id = utilisateur.UtilisateurId }, utilisateur);
+            return CreatedAtAction("GetById", new { id = utilisateur.UtilisateurId }, utilisateur);
         }
 
         [HttpPatch("{id}")]
@@ -149,7 +154,7 @@ namespace SeriesApi.Controllers
             return utilisateur.Value;
         }
 
-        /*// DELETE: api/Utilisateurs/5
+        // DELETE: api/Utilisateurs/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -170,11 +175,11 @@ namespace SeriesApi.Controllers
             await dataRepository.DeleteAsync(utilisateur.Value);
 
             return NoContent();
-        }*/
+        }
 
-        /* private bool UtilisateurExists(int id)
-         {
-             return (_context.Utilisateurs?.Any(e => e.UtilisateurId == id)).GetValueOrDefault();
-         }*/
+        /*private bool UtilisateurExists(int id)
+        {
+            return (_context.Utilisateurs?.Any(e => e.UtilisateurId == id)).GetValueOrDefault();
+        }*/
     }
 }

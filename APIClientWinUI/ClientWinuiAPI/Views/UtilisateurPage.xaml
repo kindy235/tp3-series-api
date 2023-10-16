@@ -1,0 +1,72 @@
+﻿<Page
+    x:Class="ClientWinuiAPI.Views.UtilisateurPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="using:ClientWinuiAPI.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:UtilisateurViewModel}"
+    mc:Ignorable="d">
+
+    <Grid x:Name="ContentArea">
+        
+        <StackPanel>
+            
+            <!-- Champ de recherche par email -->
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="RechercheEmailTextBox" PlaceholderText="Email de l'Utilisateur" Width="200" Text="{Binding TextSearchMail, Mode=TwoWay}" />
+                <Button Content="Rechercher" Command="{Binding SearchUserByEmail}"/>
+              
+            </StackPanel>
+
+            <!-- Nom -->
+            <TextBlock Text="Nom" />
+            <TextBox x:Name="NomTextBox" Text="{Binding Utilisateur.Nom, Mode=TwoWay}" PlaceholderText="Nom" />
+
+            <!-- Prénom -->
+            <TextBlock Text="Prénom" />
+            <TextBox x:Name="PrenomTextBox" Text="{Binding Utilisateur.Prenom, Mode=TwoWay}" PlaceholderText="Prénom" />
+
+            <!-- Mobile -->
+            <TextBlock Text="Mobile" />
+            <TextBox x:Name="MobileTextBox" Text="{Binding Utilisateur.Mobile, Mode=TwoWay}" PlaceholderText="Mobile" />
+
+            <!-- Email -->
+            <TextBlock Text="Email" />
+            <TextBox x:Name="MailTextBox" Text="{Binding Utilisateur.Mail, Mode=TwoWay}" PlaceholderText="Email" />
+
+            <!-- Mot de passe -->
+            <TextBlock Text="Mot de passe" />
+            <PasswordBox x:Name="PwdPasswordBox" Password="{Binding Utilisateur.Pwd, Mode=TwoWay}" PlaceholderText="Mot de passe" />
+
+            <!-- Adresse -->
+            <TextBlock Text="Adresse" />
+            <TextBox x:Name="RueTextBox" Text="{Binding Utilisateur.Rue, Mode=TwoWay}" PlaceholderText="Rue" />
+            <TextBox x:Name="CodePostalTextBox" Text="{Binding Utilisateur.CodePostal, Mode=TwoWay}" PlaceholderText="Code Postal" />
+            <TextBox x:Name="VilleTextBox" Text="{Binding Utilisateur.Ville, Mode=TwoWay}" PlaceholderText="Ville" />
+
+            <!-- Pays -->
+            <TextBlock Text="Pays" />
+            <ComboBox x:Name="PaysComboBox">
+                <ComboBoxItem Content="{Binding Utilisateur.Pays, Mode=TwoWay}" />
+                <!-- Ajoutez d'autres pays ici -->
+            </ComboBox>
+
+            <!-- Latitude / Longitude -->
+            <TextBlock Text="Latitude" />
+            <TextBox x:Name="LatitudeTextBox" Text="{Binding Utilisateur.Latitude, Mode=TwoWay}" PlaceholderText="Latitude" />
+            <TextBlock Text="Longitude" />
+            <TextBox x:Name="LongitudeTextBox" Text="{Binding Utilisateur.Longitude, Mode=TwoWay}" PlaceholderText="Longitude" />
+        </StackPanel>
+
+        <RelativePanel>
+            <CommandBar x:Name="AppCommandBar" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True">
+                <CommandBar.PrimaryCommands>
+                    <AppBarButton Name="Save" Icon="Save" Label="Save Change" Command="{Binding BtnModifyUtilisateurCommand}"></AppBarButton>
+                    <AppBarButton Name="Clear" Icon="ClearSelection" Label="Clear" Command="{Binding BtnClearUtilisateurCommand}"></AppBarButton>
+                    <AppBarButton Name="Add" Icon="Add"  Label="Add" Command="{Binding BtnAddUtilisateurCommand}"></AppBarButton>
+                </CommandBar.PrimaryCommands>
+            </CommandBar>
+        </RelativePanel>
+
+    </Grid>
+
+</Page>
