@@ -102,9 +102,9 @@ public partial class App : Application
         await App.GetService<IActivationService>().ActivateAsync(args);
     }
 
-    //public static FrameworkElement? MainRoot => MainWindow.Content as FrameworkElement;
+    public static FrameworkElement? MainRoot => MainWindow.Content as FrameworkElement;
 
-    public static FrameworkElement? MainRoot
+  /*  public static FrameworkElement? MainRoot
     {
         get
         {
@@ -117,5 +117,5 @@ public partial class App : Application
             }
             return null;
         }
-    }
+    }*/
 }

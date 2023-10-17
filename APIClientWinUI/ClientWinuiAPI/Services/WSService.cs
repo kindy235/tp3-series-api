@@ -28,23 +28,24 @@ public class WSService
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
-    public async Task<T> GetAsync<T>(string endpoint)
+    public async Task<HttpResponseMessage> GetAsync<T>(string endpoint)
     {
         var response = await httpClient.GetAsync(endpoint);
-        if (response.IsSuccessStatusCode)
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostAsync<T>(string endpoint, T data)
+    {
+        var response = await httpClient.PostAsJsonAsync(endpoint, data);
+        return response;
+        /*if (response.IsSuccessStatusCode)
         {
             return await response.Content.ReadAsAsync<T>();
         }
         else
         {
             throw new Exception("Error accessing the API: " + response.ReasonPhrase);
-        }
-    }
-
-    public async Task<T> PostAsync<T>(string endpoint, T data)
-    {
-        var response = await httpClient.PostAsJsonAsync(endpoint, data);
-        return await response.Content.ReadAsAsync<T>();
+        }*/
     }
 
     public async Task<HttpResponseMessage> PutAsync<T>(string endpoint, T data)

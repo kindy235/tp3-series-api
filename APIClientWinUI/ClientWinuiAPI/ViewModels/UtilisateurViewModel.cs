@@ -68,56 +68,62 @@ public partial class UtilisateurViewModel : ObservableRecipient
 
     public async Task ActionBtnModifyUtilisateurCommand()
     {
-        // Assurez-vous que l'utilisateur n'est pas null
         if (Utilisateur == null)
         {
-            // Gérez l'erreur ou affichez un message à l'utilisateur
+            await ShowDialog("Modification", "Formulaire invalide");
             return;
         }
 
-        // Appel de la méthode de service PUT pour mettre à jour l'utilisateur
-        var response = await userService.PutUser(Utilisateur.UtilisateurId, Utilisateur);
+        var success = await userService.PutUser(Utilisateur.UtilisateurId, Utilisateur);
 
-        // Gérez la réponse, par exemple, vérifiez si la mise à jour a réussi
-        if (response.IsSuccessStatusCode)
+        if (success)
         {
-            // La mise à jour a réussi, vous pouvez afficher un message ou effectuer d'autres actions.
-            // Où que vous soyez dans votre code
-            var contentDialog = new ContentDialog
-            {
-                Title = "Modification",
-                Content = "Modification réussie",
-                PrimaryButtonText = "OK"
-            };
-            try
-            {
-                await contentDialog.ShowAsync();
-            }
-            catch (System.Exception){}
-
+            await ShowDialog("Modification", "Modification réussie");
         }
         else
         {
-            // La mise à jour a échoué, gérez l'erreur ou affichez un message d'erreur.
+            await ShowDialog("Modification", "Echec de la Modification");
         }
     }
 
-    private Task ActionBtnAddUtilisateurCommand() => throw new NotImplementedException();
+    private async Task ActionBtnAddUtilisateurCommand()
+    {
+        if (Utilisateur == null)
+        {
+            await ShowDialog("Ajout", "Formulaire invalide");
+            return;
+        }
+
+        var user = await userService.PostUser(Utilisateur);
+
+        if (user != null)
+        {
+            await ShowDialog("Ajout", "Utilisateur ajouté avec succès");
+        }
+        else
+        {
+            await ShowDialog("Ajout", "Opération d'ajout non réussie");
+        }
+    }
     private Task ActionBtnClearUtilisateurCommand()
     {
         Utilisateur = null;
         return Task.CompletedTask;
     }
 
-    /*public string UserNom { get; set; }
-    public string UserPrenom{ get; set;}
-    public string UserMobile { get; set; }
-    public string UserEmail { get; set; }
-    public string UserPwd { get; set;}
-    public string UserRue { get; set;}
-    public string UserPostal { get; set;}
-    public string UserVille { get; set;}
-    public string UserPays { get; set;}
-    public string UserLat { get; set;}
-    public string UserLong { get; set;}*/
+    private static async Task ShowDialog(string title, string message)
+    {
+        try
+        {
+            var contentDialog = new ContentDialog
+            {
+                Title = title,
+                Content = message,
+                PrimaryButtonText = "OK",
+                XamlRoot = App.MainRoot.XamlRoot
+            };
+            await contentDialog.ShowAsync();
+        }
+        catch (System.Exception) { }
+    }
 }

@@ -27,33 +27,70 @@ internal class UserService
         WSService = WSService.GetService(controller);
     }
 
-    public async Task<Utilisateur> GetUserByEmail(string email)
+    public async Task<Utilisateur?> GetUserByEmail(string email)
     {
-        var user = await WSService.GetAsync<Utilisateur>(controller + "/GetByEmail/" + email);
-        return user;
+        var response = await WSService.GetAsync<Utilisateur>(controller + "/GetByEmail/" + email);
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadAsAsync<Utilisateur>();
+        }
+        else
+        {
+            return null;
+        }
     }
 
-    public async Task<Utilisateur> GetUserById(int id)
+    public async Task<Utilisateur?> GetUserById(int id)
     {
-        var user = await WSService.GetAsync<Utilisateur>(controller + "/GetById/" + id.ToString());
-        return user;
+        var response = await WSService.GetAsync<Utilisateur>(controller + "/GetById/" + id.ToString());
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadAsAsync<Utilisateur>();
+        }
+        else
+        {
+            return null;
+        }
     }
 
-    public async Task<Utilisateur> PostUser(Utilisateur utilisateur)
+    public async Task<Utilisateur?> PostUser(Utilisateur utilisateur)
     {
-        var user = await WSService.PostAsync(controller, utilisateur);
-        return user;
+        utilisateur.UtilisateurId = 0;
+        var response = await WSService.PostAsync(controller, utilisateur);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadAsAsync<Utilisateur>();
+        }
+        else
+        {
+            return null;
+        }
     }
 
-    public async Task<HttpResponseMessage> PutUser(int id, Utilisateur utilisateur)
+    public async Task<bool> PutUser(int id, Utilisateur utilisateur)
     {
         var response = await WSService.PutAsync(controller + "/" + id.ToString(), utilisateur);
-        return response;
+        if (response.IsSuccessStatusCode)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    public async Task<HttpResponseMessage> DeleteUser(int id)
+    public async Task<bool> DeleteUser(int id)
     {
         var response = await WSService.DeleteAsync(controller + "/" + id.ToString());
-        return response;
+        if (response.IsSuccessStatusCode)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
