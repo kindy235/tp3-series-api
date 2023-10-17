@@ -8,6 +8,7 @@ using ClientWinuiAPI.Models;
 namespace ClientWinuiAPI.Services;
 internal class UserService
 {
+    private readonly string baseUrl = "https://localhost:44358/api/Utilisateurs/";
     public WSService WSService
     { get; set; }
     private static UserService? instance;
@@ -21,15 +22,14 @@ internal class UserService
         }
     }
 
-    private readonly string controller = "Utilisateurs";
     public UserService()
     {
-        WSService = WSService.GetService(controller);
+        WSService = new WSService(baseUrl);
     }
 
     public async Task<Utilisateur?> GetUserByEmail(string email)
     {
-        var response = await WSService.GetAsync<Utilisateur>(controller + "/GetByEmail/" + email);
+        var response = await WSService.GetAsync<Utilisateur>("GetByEmail/" + email);
         if (response.IsSuccessStatusCode)
         {
             return await response.Content.ReadAsAsync<Utilisateur>();
@@ -42,7 +42,7 @@ internal class UserService
 
     public async Task<Utilisateur?> GetUserById(int id)
     {
-        var response = await WSService.GetAsync<Utilisateur>(controller + "/GetById/" + id.ToString());
+        var response = await WSService.GetAsync<Utilisateur>("GetById/" + id.ToString());
         if (response.IsSuccessStatusCode)
         {
             return await response.Content.ReadAsAsync<Utilisateur>();
@@ -56,7 +56,7 @@ internal class UserService
     public async Task<Utilisateur?> PostUser(Utilisateur utilisateur)
     {
         utilisateur.UtilisateurId = 0;
-        var response = await WSService.PostAsync(controller, utilisateur);
+        var response = await WSService.PostAsync("",utilisateur);
 
         if (response.IsSuccessStatusCode)
         {
@@ -70,7 +70,7 @@ internal class UserService
 
     public async Task<bool> PutUser(int id, Utilisateur utilisateur)
     {
-        var response = await WSService.PutAsync(controller + "/" + id.ToString(), utilisateur);
+        var response = await WSService.PutAsync(id.ToString(), utilisateur);
         if (response.IsSuccessStatusCode)
         {
             return true;
@@ -83,7 +83,7 @@ internal class UserService
 
     public async Task<bool> DeleteUser(int id)
     {
-        var response = await WSService.DeleteAsync(controller + "/" + id.ToString());
+        var response = await WSService.DeleteAsync(id.ToString());
         if (response.IsSuccessStatusCode)
         {
             return true;

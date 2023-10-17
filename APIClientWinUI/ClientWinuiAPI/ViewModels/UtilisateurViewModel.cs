@@ -2,12 +2,14 @@
 using System.Windows.Input;
 using ClientWinuiAPI.Models;
 using ClientWinuiAPI.Services;
+using com.sun.org.apache.xpath.@internal.operations;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using java.beans;
 using java.lang;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Exception = System.Exception;
 
 namespace ClientWinuiAPI.ViewModels;
 
@@ -15,18 +17,23 @@ namespace ClientWinuiAPI.ViewModels;
 public partial class UtilisateurViewModel : ObservableRecipient
 {
     private readonly UserService userService;
+    private readonly BingMapService bingMapService;
+    private Utilisateur utilisateur;
+
     public UtilisateurViewModel()
     {
         userService = UserService.GetService;
+        bingMapService = BingMapService.GetService;
+        utilisateur = new Utilisateur();
         SearchUserByEmail = new AsyncRelayCommand(ActionSearchUserByEmail);
         BtnModifyUtilisateurCommand = new AsyncRelayCommand(ActionBtnModifyUtilisateurCommand);
         BtnClearUtilisateurCommand = new AsyncRelayCommand(ActionBtnClearUtilisateurCommand);
         BtnAddUtilisateurCommand = new AsyncRelayCommand(ActionBtnAddUtilisateurCommand);
+
     }
 
    
 
-    private Utilisateur utilisateur;
     public Utilisateur? Utilisateur
     {
         get => utilisateur;
@@ -64,13 +71,17 @@ public partial class UtilisateurViewModel : ObservableRecipient
     public async Task ActionSearchUserByEmail()
     {
         Utilisateur = await userService.GetUserByEmail(textSearchMail);
+        if (Utilisateur == null)
+        {
+            await ShowDialog("email "+ textSearchMail + " introuvable !");
+        }
     }
 
     public async Task ActionBtnModifyUtilisateurCommand()
     {
         if (Utilisateur == null)
         {
-            await ShowDialog("Modification", "Formulaire invalide");
+            await ShowDialog("Formulaire invalide !");
             return;
         }
 
@@ -78,11 +89,11 @@ public partial class UtilisateurViewModel : ObservableRecipient
 
         if (success)
         {
-            await ShowDialog("Modification", "Modification réussie");
+            await ShowDialog("Utilisateur " + Utilisateur.Nom + " modifié avec succès !");
         }
         else
         {
-            await ShowDialog("Modification", "Echec de la Modification");
+            await ShowDialog("Echec de la Modification !");
         }
     }
 
@@ -90,19 +101,37 @@ public partial class UtilisateurViewModel : ObservableRecipient
     {
         if (Utilisateur == null)
         {
-            await ShowDialog("Ajout", "Formulaire invalide");
+            await ShowDialog("Formulaire invalide !");
             return;
         }
+
+        try
+        {
+            var rootObject = await bingMapService.GetCoordinates(Utilisateur.Rue, Utilisateur.CodePostal, Utilisateur.Ville);
+            if (rootObject != null)
+            {
+                var lat = rootObject.resourceSets[0].resources[0].point.coordinates[0];
+                var lng = rootObject.resourceSets[0].resources[0].point.coordinates[1];
+                Utilisateur.Latitude = (decimal)lat;
+                Utilisateur.Longitude = (decimal)lng;
+            }
+            else
+            {
+                await ShowDialog("Adresse fournie invalide");
+                return;
+            }
+        }
+        catch (Exception) { }
 
         var user = await userService.PostUser(Utilisateur);
 
         if (user != null)
         {
-            await ShowDialog("Ajout", "Utilisateur ajouté avec succès");
+            await ShowDialog("Utilisateur "+ Utilisateur.Nom + " ajouté avec succès !");
         }
         else
         {
-            await ShowDialog("Ajout", "Opération d'ajout non réussie");
+            await ShowDialog("Opération d'ajout non réussie !");
         }
     }
     private Task ActionBtnClearUtilisateurCommand()
@@ -111,13 +140,13 @@ public partial class UtilisateurViewModel : ObservableRecipient
         return Task.CompletedTask;
     }
 
-    private static async Task ShowDialog(string title, string message)
+    private static async Task ShowDialog(string message)
     {
         try
         {
             var contentDialog = new ContentDialog
             {
-                Title = title,
+                Title = "Information",
                 Content = message,
                 PrimaryButtonText = "OK",
                 XamlRoot = App.MainRoot.XamlRoot
