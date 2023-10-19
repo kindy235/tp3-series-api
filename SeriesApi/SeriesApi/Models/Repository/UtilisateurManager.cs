@@ -39,6 +39,11 @@ namespace SeriesApi.Models.Repository
             return await seriesDbContext.Utilisateurs.ToListAsync();
         }
 
+        public Task<ActionResult<IEnumerable<Utilisateur>>> GetAllByStringAsync(string str)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ActionResult<Utilisateur>> GetByIdAsync(int id)
         {   
             return await seriesDbContext.Utilisateurs.FindAsync(id);

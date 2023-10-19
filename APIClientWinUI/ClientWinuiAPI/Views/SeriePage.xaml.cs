@@ -14,6 +14,7 @@ public sealed partial class SeriePage : Page
     public SeriePage()
     {
         ViewModel = App.GetService<SerieViewModel>();
+        DataContext = ViewModel;
         InitializeComponent();
     }
 }

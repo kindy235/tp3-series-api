@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SeriesApi.Models.EntityFramework;
 using SeriesApi.Models.Repository;
+using System.Buffers;
 
 namespace SeriesApi
 {
@@ -13,7 +16,9 @@ namespace SeriesApi
             // Add services to the container.
 
             builder.Services.AddControllers()
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson(options =>
+                      options.SerializerSettings.ReferenceLoopHandling =
+                        ReferenceLoopHandling.Ignore);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -21,6 +26,7 @@ namespace SeriesApi
                 options.UseNpgsql(builder.Configuration.GetConnectionString("SeriesDbContext")));
 
             builder.Services.AddScoped<IDataRepository<Utilisateur>, UtilisateurManager>();
+            builder.Services.AddScoped<IDataRepository<Serie>, SerieManager>();
             
             var app = builder.Build();
 
