@@ -16,7 +16,7 @@
                     <Button Content="Rechercher" Command="{Binding SearchSeriesByTitle}"/>
                 </StackPanel>
                 <!-- Display the list of series -->
-                <ListView ItemsSource="{Binding SeriesList}">
+                <ListView x:Name="SerieListView" ItemsSource="{Binding SeriesList}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:Serie">
                             <Grid Height="auto" Margin="6">
@@ -27,7 +27,7 @@
                                
                                 <ScrollViewer>
                                     <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="16">
-                                        <TextBlock x:Name="NomAppli" Text="{x:Bind Titre}" TextDecorations="Underline"  TextWrapping="NoWrap" RelativePanel.Above="logo" RelativePanel.AlignHorizontalCenterWithPanel="True" FontWeight="Bold" FontSize="18" Foreground="LightBlue"/>
+                                        <TextBlock x:Name="NomAppli" Text="{Binding Titre}" TextDecorations="Underline"  TextWrapping="NoWrap" RelativePanel.Above="logo" RelativePanel.AlignHorizontalCenterWithPanel="True" FontWeight="Bold" FontSize="18" Foreground="LightBlue"/>
                                         <Image x:Name="logo" HorizontalAlignment="Left" Source="https://betaseries.pro/_next/static/media/logo-white.82a62034.png" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Width="500" Height="auto"/>
                                         <TextBlock Text="{Binding Resume}"  Style="{StaticResource BodyTextStyle}" MaxWidth="1080" TextAlignment="Justify" TextWrapping="Wrap" Margin="0,10,0,0" RelativePanel.Above="logo"
                                         RelativePanel.AlignHorizontalCenterWithPanel="True"/>
@@ -48,6 +48,10 @@
                                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                                 <TextBlock Text="Network: " Style="{StaticResource BodyTextStyle}" TextWrapping="Wrap"/>
                                                 <TextBlock Text="{Binding Network}" Style="{StaticResource BodyTextStyle}" TextWrapping="Wrap" Margin="5,0,0,0"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                                <TextBlock Text="Average Rating:" Style="{StaticResource BodyTextStyle}" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding AverageNote}"  Style="{StaticResource BodyTextStyle}" TextWrapping="Wrap" Margin="5,0,0,0"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </StackPanel>

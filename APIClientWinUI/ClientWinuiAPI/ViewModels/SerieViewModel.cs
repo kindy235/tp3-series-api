@@ -14,12 +14,12 @@ public partial class SerieViewModel : ObservableRecipient
     private readonly SerieService serieService;
     private ObservableCollection<Serie> seriesList;
 
+
     public SerieViewModel()
     {
         serieService = SerieService.GetService;
         seriesList = new ObservableCollection<Serie>();
         SearchSeriesByTitle = new AsyncRelayCommand(ActionSearchSeriesByTitle);
-        //LoadSeriesAsync("titan");
     }
 
 
@@ -52,6 +52,7 @@ public partial class SerieViewModel : ObservableRecipient
     }
 
     private string textSearchSeries;
+    private Serie selectedSerie;
 
     private async Task ActionSearchSeriesByTitle()
     {
@@ -64,14 +65,41 @@ public partial class SerieViewModel : ObservableRecipient
         else
         {
             seriesList.Clear();
-
+            
             foreach (var serie in series)
             {
                 seriesList.Add(serie);
             }
+
             SeriesList = seriesList;
+            if (series.Count == 0)
+            {
+                await ShowDialog("Aucune série trouvé !");
+            }
         }
     }
+
+
+    // Gestion de la sélection d'une série (exemple dans votre ViewModel) :
+    public Serie SelectedSerie
+    {
+        get => selectedSerie;
+        set
+        {
+            if (SetProperty(ref selectedSerie, value))
+            {
+                // L'utilisateur a sélectionné une série, vous pouvez afficher les détails ici.
+                ShowSerieDetailsPage(value);
+            }
+        }
+    }
+
+
+    private void OnSerieSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+    
+    }
+    private void ShowSerieDetailsPage(Serie value) => throw new NotImplementedException();
 
     private static async Task ShowDialog(string message)
     {

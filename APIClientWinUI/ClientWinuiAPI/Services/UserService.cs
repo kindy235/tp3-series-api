@@ -56,7 +56,7 @@ internal class UserService
     public async Task<Utilisateur?> PostUser(Utilisateur utilisateur)
     {
         utilisateur.UtilisateurId = 0;
-        var response = await WSService.PostAsync("",utilisateur);
+        var response = await WSService.PostAsync("", utilisateur);
 
         if (response.IsSuccessStatusCode)
         {

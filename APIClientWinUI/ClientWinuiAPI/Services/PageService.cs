@@ -18,6 +18,7 @@ public class PageService : IPageService
         Configure<UtilisateurViewModel, UtilisateurPage>();
         Configure<SerieViewModel, SeriePage>();
         Configure<SettingsViewModel, SettingsPage>();
+        Configure<SerieDetailsViewModel, SerieDetailsPage>();
     }
 
     public Type GetPageType(string key)

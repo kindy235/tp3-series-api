@@ -70,6 +70,8 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
+            services.AddTransient<SerieDetailsViewModel>();
+            services.AddTransient<SerieDetailsPage>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();
             services.AddTransient<SerieViewModel>();
@@ -104,18 +106,4 @@ public partial class App : Application
 
     public static FrameworkElement? MainRoot => MainWindow.Content as FrameworkElement;
 
-  /*  public static FrameworkElement? MainRoot
-    {
-        get
-        {
-            if (Window.Current.Content is Frame rootFrame)
-            {
-                if (rootFrame.Content is FrameworkElement frameworkElement)
-                {
-                    return frameworkElement;
-                }
-            }
-            return null;
-        }
-    }*/
 }

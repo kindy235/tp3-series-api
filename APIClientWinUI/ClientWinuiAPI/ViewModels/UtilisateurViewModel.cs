@@ -25,6 +25,7 @@ public partial class UtilisateurViewModel : ObservableRecipient
         userService = UserService.GetService;
         bingMapService = BingMapService.GetService;
         utilisateur = new Utilisateur();
+        Utilisateur = utilisateur;
         SearchUserByEmail = new AsyncRelayCommand(ActionSearchUserByEmail);
         BtnModifyUtilisateurCommand = new AsyncRelayCommand(ActionBtnModifyUtilisateurCommand);
         BtnClearUtilisateurCommand = new AsyncRelayCommand(ActionBtnClearUtilisateurCommand);
