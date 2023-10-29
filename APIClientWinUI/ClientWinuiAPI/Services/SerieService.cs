@@ -11,10 +11,8 @@ internal class SerieService
 {
     private readonly string baseUrl = "https://localhost:44358/api/Series/";
 
-    public WSService WSService
-    {
-        get; set;
-    }
+    private readonly WSService WSService;
+    
     private static SerieService? instance;
 
     public static SerieService GetService
@@ -26,7 +24,7 @@ internal class SerieService
         }
     }
 
-    public SerieService()
+    private SerieService()
     {
         WSService = new WSService(baseUrl);
     }

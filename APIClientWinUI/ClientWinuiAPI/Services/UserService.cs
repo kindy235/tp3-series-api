@@ -9,8 +9,7 @@ namespace ClientWinuiAPI.Services;
 internal class UserService
 {
     private readonly string baseUrl = "https://localhost:44358/api/Utilisateurs/";
-    public WSService WSService
-    { get; set; }
+    private readonly WSService WSService;
     private static UserService? instance;
 
     public static UserService GetService
@@ -22,7 +21,7 @@ internal class UserService
         }
     }
 
-    public UserService()
+    private UserService()
     {
         WSService = new WSService(baseUrl);
     }

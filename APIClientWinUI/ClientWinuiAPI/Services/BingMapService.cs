@@ -13,10 +13,8 @@ internal class BingMapService
 {
     private readonly string BaseUrl = "http://dev.virtualearth.net/REST/v1/Locations/";
     private readonly string key = "key=Ag7KBEIMrvvjF2Kpz9Ze9UaNNoj1jkizmw-_bxWFpRaLJEXzBGNW-IFl4aHj5jd1";
-    public WSService WSService
-    {
-        get; set;
-    }
+    private readonly WSService WSService;
+ 
     private static BingMapService? instance;
 
     public static BingMapService GetService
@@ -28,7 +26,7 @@ internal class BingMapService
         }
     }
 
-    public BingMapService()
+    private BingMapService()
     {
         WSService = new WSService(BaseUrl);
     }
