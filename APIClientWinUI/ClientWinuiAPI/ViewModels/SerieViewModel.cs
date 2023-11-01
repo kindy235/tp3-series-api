@@ -3,9 +3,12 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ClientWinuiAPI.Models;
 using ClientWinuiAPI.Services;
+using ClientWinuiAPI.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace ClientWinuiAPI.ViewModels;
 
@@ -13,6 +16,7 @@ public partial class SerieViewModel : ObservableRecipient
 {
     private readonly SerieService serieService;
     private ObservableCollection<Serie> seriesList;
+    
 
 
     public SerieViewModel()
@@ -21,7 +25,6 @@ public partial class SerieViewModel : ObservableRecipient
         seriesList = new ObservableCollection<Serie>();
         SearchSeriesByTitle = new AsyncRelayCommand(ActionSearchSeriesByTitle);
     }
-
 
     public ObservableCollection<Serie> SeriesList
     {
@@ -79,8 +82,11 @@ public partial class SerieViewModel : ObservableRecipient
         }
     }
 
+    public Frame NavigationFrame
+    {
+        get; set;
+    }
 
-    // Gestion de la sélection d'une série (exemple dans votre ViewModel) :
     public Serie SelectedSerie
     {
         get => selectedSerie;
@@ -88,18 +94,15 @@ public partial class SerieViewModel : ObservableRecipient
         {
             if (SetProperty(ref selectedSerie, value))
             {
-                // L'utilisateur a sélectionné une série, vous pouvez afficher les détails ici.
                 ShowSerieDetailsPage(value);
             }
         }
     }
 
-
-    private void OnSerieSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void ShowSerieDetailsPage(Serie value)
     {
-    
+        NavigationFrame?.Navigate(typeof(SerieDetailsPage), value);
     }
-    private void ShowSerieDetailsPage(Serie value) => throw new NotImplementedException();
 
     private static async Task ShowDialog(string message)
     {

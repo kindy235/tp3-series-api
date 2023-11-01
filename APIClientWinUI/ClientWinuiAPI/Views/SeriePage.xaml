@@ -1,5 +1,6 @@
 ﻿<Page
     x:Class="ClientWinuiAPI.Views.SeriePage"
+    NavigationCacheMode="Enabled"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,11 +13,11 @@
         <ScrollViewer>
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
-                    <TextBox x:Name="RechercheEmailTextBox" PlaceholderText="titre recherché" Width="200" Text="{Binding TextSearchSeries, Mode=TwoWay}" />
+                    <TextBox x:Name="RechercheEmailTextBox" PlaceholderText="Titre recherché" Width="200" Text="{Binding TextSearchSeries, Mode=TwoWay}" />
                     <Button Content="Rechercher" Command="{Binding SearchSeriesByTitle}"/>
                 </StackPanel>
                 <!-- Display the list of series -->
-                <ListView x:Name="SerieListView" ItemsSource="{Binding SeriesList}">
+                <ListView x:Name="SerieListView" ItemsSource="{Binding SeriesList}" SelectionChanged="OnSerieSelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:Serie">
                             <Grid Height="auto" Margin="6">
