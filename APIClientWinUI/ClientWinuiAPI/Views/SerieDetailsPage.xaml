@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 	
     <Grid x:Name="ContentArea">
-
+        <ScrollViewer>
         <StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
                 <Button x:Name="BackButton" Click="BackButton_Click"
@@ -47,11 +47,11 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-            <ScrollViewer>
+            
                 <StackPanel>
                     <TextBlock x:Name="ListNotes" Text="Notes" TextDecorations="Underline"  TextWrapping="NoWrap" RelativePanel.Above="logo" RelativePanel.AlignHorizontalCenterWithPanel="True" FontWeight="Bold" FontSize="18" Foreground="LightBlue"/>
                     <!-- Display the list of notes -->
-                    <ListView x:Name="SerieListView" ItemsSource="{Binding Serie.NotesSerie}">
+                    <ListView x:Name="SerieListView" ItemsSource="{Binding ListSerieNotes}">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="local:Notation">
                                 <Grid Height="auto" Margin="3">
@@ -75,12 +75,13 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
-                        <NumberBox x:Name="NoteSerieNumberBox" PlaceholderText="Note la serie" Width="200" Text="{Binding NotationValue, Mode=TwoWay}" />
-                        <Button Content="ajouter" Command="{Binding AddNotationtoSerie}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,20">
+                        <NumberBox x:Name="NoteSerieNumberBox" Header="Notation:" Value="{Binding NotationValue, Mode=TwoWay}" Minimum="0" Maximum="5"/>
+                        <Button Content="ajouté note" Command="{Binding AddNotationtoSerie}" Margin="0,30,0,0"/>
                     </StackPanel>
                 </StackPanel>
-            </ScrollViewer>
+            
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
