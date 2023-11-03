@@ -1,5 +1,7 @@
 ﻿using ClientWinuiAPI.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Windows.Input;
 
 namespace ClientWinuiAPI.ViewModels;
 
@@ -10,6 +12,8 @@ public partial class SerieDetailsViewModel : ObservableRecipient
     {
         Serie = new Serie();
         Serie = serie;
+        AddNotationtoSerie = new RelayCommand(PerformAddNotationtoSerie);
+
     }
 
     public Serie? Serie
@@ -23,5 +27,22 @@ public partial class SerieDetailsViewModel : ObservableRecipient
                 OnPropertyChanged(nameof(serie));
             }
         }
+    }
+
+    public ICommand AddNotationtoSerie
+    {
+        get; set;
+    }
+
+    private void PerformAddNotationtoSerie()
+    {
+    }
+
+    private string notationValue;
+
+    public string NotationValue
+    {
+        get => notationValue;
+        set => SetProperty(ref notationValue, value);
     }
 }

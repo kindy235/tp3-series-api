@@ -36,7 +36,7 @@ namespace SeriesApi.Models.Repository
 
         public async Task<ActionResult<IEnumerable<Serie>>> GetAllByStringAsync(string title)
         {
-            return await seriesDbContext.Series.Include(s => s.NotesSerie)
+            return await seriesDbContext.Series.Include(s => s.NotesSerie).ThenInclude(n => n.UtilisateurNotant)
                 .Where(s => s.Titre.ToUpper().Contains(title.ToUpper())).ToListAsync();
         }
 
