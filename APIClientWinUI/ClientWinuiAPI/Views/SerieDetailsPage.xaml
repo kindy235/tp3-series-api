@@ -76,8 +76,9 @@
                         </ListView.ItemTemplate>
                     </ListView>
                     <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,20">
-                        <NumberBox x:Name="NoteSerieNumberBox" Header="Notation:" Value="{Binding NotationValue, Mode=TwoWay}" Minimum="0" Maximum="5"/>
-                        <Button Content="ajouté note" Command="{Binding AddNotationtoSerie}" Margin="0,30,0,0"/>
+                        <NumberBox x:Name="NoteSerieNumberBox" Header="Notation:" Value="{Binding NotationValue, Mode=TwoWay}" Margin="0,30,0,0"  Minimum="0" Maximum="5"/>
+                        <TextBox x:Name="RechercheEmailTextBox" Header="Mail utilisateur:" PlaceholderText="Email utilisateur" Margin="0,30,0,0" Width="200" Text="{Binding TextUserMail, Mode=TwoWay}" />
+                        <Button Content="ajouté note" Command="{Binding AddNotationtoSerie}" Margin="0,60,0,0"/>
                     </StackPanel>
                 </StackPanel>
             

@@ -22,4 +22,4 @@ tp realisé jusqu'à la page 14
 
 ### Reste à faire 
 
-chapitre 5, questions a et c
+chapitre 5, questions a

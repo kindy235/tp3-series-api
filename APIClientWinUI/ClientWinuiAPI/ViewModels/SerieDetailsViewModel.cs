@@ -2,7 +2,9 @@
 using ClientWinuiAPI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml.Controls;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using System.Windows.Input;
 using static com.sun.tools.javap.TypeAnnotationWriter;
 
@@ -11,14 +13,14 @@ namespace ClientWinuiAPI.ViewModels;
 public partial class SerieDetailsViewModel : ObservableRecipient
 {
     public Serie? serie;
-    //private readonly UserService _userService;
+    private readonly UserService _userService;
     public SerieDetailsViewModel()
     {
         Serie = new Serie();
         Serie = serie;
-        //_userService = UserService.GetService;
+        _userService = UserService.GetService;
         listSerieNotes = new ObservableCollection<Notation>();
-        AddNotationtoSerie = new RelayCommand(PerformAddNotationtoSerie);
+        AddNotationtoSerie = new AsyncRelayCommand(PerformAddNotationtoSerie);
 
     }
 
@@ -47,19 +49,40 @@ public partial class SerieDetailsViewModel : ObservableRecipient
         get; set;
     }
 
-    private void PerformAddNotationtoSerie()
+    private async Task PerformAddNotationtoSerie()
     {
-        var note = NotationValue;
+        var utilisateur = await _userService.GetUserByEmail(TextUserMail);
+        if (utilisateur != null)
+        {
+            var note = NotationValue;
 
-        var notation = new Notation {
-            UtilisateurId = note%2,
-            SerieId = Serie.SerieId,
-            Note = note,
-        };
-        listSerieNotes.Add(notation);
-        Serie.NotesSerie.Add(notation);
-        OnPropertyChanged(nameof(Serie));
-        ListSerieNotes = listSerieNotes;
+            var notation = new Notation
+            {
+                UtilisateurId = utilisateur.UtilisateurId,
+                SerieId = Serie.SerieId,
+                Note = note,
+                UtilisateurNotant = utilisateur,
+                SerieNotee = Serie
+            };
+            listSerieNotes.Add(notation);
+            Serie.NotesSerie.Add(notation);
+            OnPropertyChanged(nameof(Serie));
+            ListSerieNotes = listSerieNotes;
+            // Serialize
+            //var json = JsonSerializer.Serialize(notation);
+
+            // Save to a JSON file
+            //File.WriteAllText("userNotes.json", json);
+
+           /* // Deserialize
+            var jsontxt = File.ReadAllText("userNotes.json");
+            var notes = JsonSerializer.Deserialize<List<Notation>>(json);*/
+        }
+        else
+        {
+            await ShowDialog("email utilisateur introuvable");
+        }
+
     }
 
 
@@ -89,5 +112,32 @@ public partial class SerieDetailsViewModel : ObservableRecipient
                 OnPropertyChanged(nameof(notationValue));
             }
         }
+    }
+
+    private string textUserMail;
+    public string TextUserMail
+    {
+        get => textUserMail;
+        set
+        {
+            textUserMail = value;
+            OnPropertyChanged(nameof(textUserMail));
+        }
+    }
+
+    private static async Task ShowDialog(string message)
+    {
+        try
+        {
+            var contentDialog = new ContentDialog
+            {
+                Title = "Information",
+                Content = message,
+                PrimaryButtonText = "OK",
+                XamlRoot = App.MainRoot.XamlRoot
+            };
+            await contentDialog.ShowAsync();
+        }
+        catch (System.Exception) { }
     }
 }
